@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+  <title>快点盖呀</title>
+  <link rel="stylesheet" href="css/game.css" />
+</head>
+<body>
+  <div id="app" data-mode="menu">
+    <header id="hud">
+      <div class="hud-top">
+        <div>
+          <div class="kicker">波次</div>
+          <div id="wave-num" class="strong">准备 1</div>
+        </div>
+        <div class="core-readout">
+          <div class="core-line"><span>核心</span><span id="core-text">480 / 480</span></div>
+          <div class="bar"><div id="core-bar"></div></div>
+        </div>
+        <div class="gold-readout">
+          <div class="kicker">金币</div>
+          <div id="gold" class="strong">110</div>
+        </div>
+      </div>
+      <div class="hud-sub">
+        <span id="interest"></span>
+        <span id="synergy"></span>
+      </div>
+    </header>
+
+    <div id="stage">
+      <canvas id="board"></canvas>
+    </div>
+
+    <section id="hero-bar">
+      <div class="hero-copy">
+        <div id="hero-name">突击手</div>
+        <div id="weapon-name" class="muted">机枪</div>
+      </div>
+      <div class="energy" aria-hidden="true"><div id="energy-bar"></div></div>
+      <button id="btn-ult" type="button" disabled>蓄力中</button>
+    </section>
+
+    <section id="dock">
+      <div id="inspect" hidden>
+        <div class="inspect-copy">
+          <strong id="inspect-name"></strong>
+          <span id="inspect-meta"></span>
+        </div>
+        <div class="inspect-actions">
+          <button id="btn-upgrade" type="button">升级</button>
+          <button id="btn-repair" type="button">维修</button>
+          <button id="btn-sell" type="button">拆除</button>
+          <button id="btn-back" type="button">返回</button>
+        </div>
+      </div>
+      <div id="palette">
+        <div id="chips"></div>
+        <button id="btn-rotate" type="button" hidden>旋转</button>
+      </div>
+      <p id="tip"></p>
+      <button id="btn-wave" type="button">开战</button>
+    </section>
+
+    <section id="screen-menu" class="screen">
+      <p class="eyebrow">竖屏塔防</p>
+      <h1>快点盖呀</h1>
+      <p class="pitch">敌人从上下左右过来。你盖墙、盖炮、改它们的路，保住中间那颗核心。</p>
+      <div class="menu-stats">
+        <span id="menu-stamina">体力 5/5</span>
+        <span id="menu-shards">碎片 0</span>
+        <span id="menu-record">还没有通关</span>
+      </div>
+      <button id="btn-start" class="primary" type="button">开始这一局</button>
+      <button id="btn-loadout" type="button">角色和武器</button>
+      <button id="btn-gems" type="button">宝石</button>
+      <p class="fine">八波一局。成功才扣 1 点体力，并发宝石。失败不扣。</p>
+    </section>
+
+    <section id="screen-loadout" class="screen" hidden>
+      <div class="screen-head">
+        <button id="btn-loadout-back" type="button">返回</button>
+        <h1>出战配置</h1>
+      </div>
+      <div id="loadout-body" class="screen-body"></div>
+    </section>
+
+    <section id="screen-gems" class="screen" hidden>
+      <div class="screen-head">
+        <button id="btn-gems-back" type="button">返回</button>
+        <h1>宝石</h1>
+        <span id="gem-shards"></span>
+      </div>
+      <div class="screen-body">
+        <div id="gem-slots"></div>
+        <div id="gem-bonds"></div>
+        <div id="gem-list"></div>
+        <button id="btn-buy-gem" type="button">用 30 碎片换一颗</button>
+        <p class="fine">同一元素凑满 2 颗激活羁绊，3 颗更强。这和建筑羁绊是两套。</p>
+      </div>
+    </section>
+
+    <section id="screen-draft" class="screen dim" hidden>
+      <p class="eyebrow">这一波守住了</p>
+      <h1>选一个强化</h1>
+      <p class="pitch">只在这一局里生效。</p>
+      <div id="draft-cards"></div>
+    </section>
+
+    <section id="screen-result" class="screen dim" hidden>
+      <p id="result-kicker" class="eyebrow"></p>
+      <h1 id="result-title"></h1>
+      <p id="result-copy" class="pitch"></p>
+      <button id="btn-again" class="primary" type="button">再来一局</button>
+      <button id="btn-home" type="button">回主页</button>
+    </section>
+
+    <div id="toast" hidden></div>
+  </div>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
