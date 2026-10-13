@@ -117,7 +117,7 @@ export function createUi(ctx) {
     const heroes = document.createElement("div");
     heroes.className = "choice-grid";
     for (const [id, hero] of Object.entries(HEROES)) {
-      heroes.append(choiceCard(hero.name, `${hero.ult}：${hero.ultDesc}`, profile.hero === id, () => {
+      heroes.append(choiceCard(hero.name, `大招「${hero.ult}」：${hero.ultDesc}`, profile.hero === id, () => {
         profile.hero = id;
         saveProfile(profile);
         renderLoadout();
@@ -137,7 +137,8 @@ export function createUi(ctx) {
     host.append(weapons);
     const note = document.createElement("p");
     note.className = "fine";
-    note.textContent = "角色负责补漏，射程铺满全图。武器只改它怎么打，不是一套装备系统。";
+    note.textContent =
+      "角色会自动打离核心最近的敌人，整张地图都打得到。大招能量在战斗中慢慢涨，打中、击杀敌人涨得更快，满了点大招按钮就能放。";
     host.append(note);
   }
 
@@ -169,7 +170,9 @@ export function createUi(ctx) {
     for (const [key, meta] of Object.entries(ELEMENTS)) {
       const count = bonds[key] ?? 0;
       const row = document.createElement("p");
-      row.textContent = bondLine(meta.name, count);
+      const head = document.createElement("b");
+      head.textContent = `${meta.name} · ${bondStatus(count)}`;
+      row.append(head, meta.bond);
       if (count >= 2) row.className = "bond-on";
       bondHost.append(row);
     }
@@ -354,10 +357,10 @@ function choiceCard(title, desc, on, onClick) {
   return button;
 }
 
-function bondLine(name, count) {
-  if (count >= 3) return `${name} ${count} · 三件套，效果加强`;
-  if (count >= 2) return `${name} ${count} · 羁绊已激活`;
-  return `${name} ${count}/2`;
+function bondStatus(count) {
+  if (count >= 3) return "已加强";
+  if (count === 2) return "已激活";
+  return `还差 ${2 - count} 颗`;
 }
 
 function upgradesById(id) {

@@ -174,65 +174,107 @@ export const WAVES = [
   { count: 24, hp: 130, speed: 1.52, dmg: 16, gold: 9, interval: 0.6, mix: ["normal", "fast", "tank", "tank"] },
 ];
 
+/**
+ * 下面角色、武器、强化、宝石羁绊的描述里写死了数字，
+ * 对应数值在 sim.js（castUlt、heroDamage、applyUpgrade、onHitEffects）。改数值要一起改描述。
+ */
 export const HEROES = {
   striker: {
     name: "突击手",
     ult: "轨道轰炸",
-    ultDesc: "打击场上所有敌人。",
+    ultDesc: "对场上每个敌人造成 36 点伤害。",
     blurb: "哪一边漏了，就补哪一边。",
   },
   engineer: {
     name: "工程师",
     ult: "紧急抢修",
-    ultDesc: "修好所有建筑，并震开敌人。",
+    ultDesc: "所有建筑回复 55% 生命（核心不算），并对每个敌人造成 18 点伤害。",
     blurb: "大招是把基地拉回来。",
   },
   storm: {
     name: "霜雷",
     ult: "静电场",
-    ultDesc: "冻结全部敌人，并劈下闪电。",
+    ultDesc: "冻住场上所有敌人 2.6 秒（不能走也不能攻击），并对每个敌人造成 26 点伤害。",
     blurb: "给炮塔争取一段输出时间。",
   },
 };
 
 export const WEAPONS = {
-  mg: { name: "机枪", desc: "快速单点。全图都能打到，用来补漏。", rate: 0.28, dmg: 3 },
+  mg: { name: "机枪", desc: "射速最快，一次打 1 个敌人。不管敌人在哪，伤害都一样。", rate: 0.28, dmg: 3 },
   shotgun: {
     name: "霰弹枪",
-    desc: "全图锁定，但离核心越近越痛，并溅到目标旁边的敌人。",
+    desc: "一次最多打中 3 个挤在一起的敌人。敌人贴近核心时伤害 +45%，刚进场时只剩一半左右。",
     rate: 0.48,
     dmg: 5,
   },
-  sniper: { name: "狙击枪", desc: "射得很慢。目标越远，这一发越痛。", rate: 1.15, dmg: 11 },
-  coil: { name: "电磁武器", desc: "命中后跳到附近的敌人身上。", rate: 0.55, dmg: 6 },
+  sniper: {
+    name: "狙击枪",
+    desc: "射得慢，但单发伤害最高。目标还在路的外半段时，伤害再 +40%，适合把敌人挡在外面。",
+    rate: 1.15,
+    dmg: 11,
+  },
+  coil: {
+    name: "电磁武器",
+    desc: "打中后会跳到附近的敌人，最多再跳 2 个，每跳一次伤害少 30%。敌人越挤越划算。",
+    rate: 0.55,
+    dmg: 6,
+  },
 };
 
 export const UPGRADES = [
-  { id: "aspd", name: "快速装填", desc: "炮塔攻击速度 +20%。" },
-  { id: "tower", name: "炮塔强化", desc: "炮塔伤害 +25%。" },
-  { id: "chill", name: "深寒", desc: "冰冻和减速更强。" },
-  { id: "repair", name: "抢修", desc: "维修花费 -30%。" },
-  { id: "wall", name: "加固", desc: "墙壁生命 +40%。" },
-  { id: "blast", name: "爆裂弹", desc: "攻击有 30% 概率小范围爆炸。" },
-  { id: "bounty", name: "赏金", desc: "敌人掉落的金币 +30%。" },
-  { id: "interest", name: "精算", desc: "利息 +5%（每波约 15%），上限仍是 40。" },
-  { id: "armor", name: "核心装甲", desc: "核心生命上限 +80，并立刻回复 80。" },
-  { id: "hero", name: "角色过载", desc: "角色伤害 +25%。" },
+  { id: "aspd", name: "快速装填", desc: "所有炮塔攻击速度 +20%。" },
+  { id: "tower", name: "炮塔强化", desc: "所有炮塔伤害 +25%。" },
+  {
+    id: "chill",
+    name: "深寒",
+    desc: "冰塔打中的敌人只剩 37% 速度（原本 50%），减速时间 +25%。没有冰塔就没用。",
+  },
+  { id: "repair", name: "抢修", desc: "点建筑维修时，花的金币 -30%。" },
+  { id: "wall", name: "加固", desc: "所有墙的生命 +40%，已经盖好的墙也算。" },
+  {
+    id: "blast",
+    name: "爆裂弹",
+    desc: "炮塔和角色的攻击有 30% 概率爆炸：目标和它身边 1 格内的敌人，再受这一击约 40% 的伤害。",
+  },
+  { id: "bounty", name: "赏金", desc: "每只敌人掉的金币 +30%。" },
+  { id: "interest", name: "精算", desc: "开战利息从 10% 提高到 15%，上限还是 40。" },
+  { id: "armor", name: "核心装甲", desc: "核心生命上限 +80，并马上回复 80 生命。" },
+  { id: "hero", name: "角色过载", desc: "角色普通攻击的伤害 +25%。大招伤害不变。" },
 ];
 
 export const ELEMENTS = {
-  fire: { name: "火", icon: "火", color: "#e4572e" },
-  ice: { name: "冰", icon: "冰", color: "#7ec8e3" },
-  lightning: { name: "雷", icon: "雷", color: "#e6c15a" },
-  poison: { name: "毒", icon: "毒", color: "#8fbf6a" },
+  fire: {
+    name: "火",
+    icon: "火",
+    color: "#e4572e",
+    bond: "2 颗：被打中的敌人着火，每秒 3 点伤害，烧 1.6 秒。3 颗：每秒 6 点，烧 2.4 秒。",
+  },
+  ice: {
+    name: "冰",
+    icon: "冰",
+    color: "#7ec8e3",
+    bond: "2 颗：被打中的敌人只剩 62% 速度，持续 0.9 秒。3 颗：只剩 45%，持续 1.4 秒。",
+  },
+  lightning: {
+    name: "雷",
+    icon: "雷",
+    color: "#e6c15a",
+    bond: "2 颗：打中敌人时有 25% 概率电到旁边 1 个敌人，造成 4 点伤害。3 颗：概率 45%，6 点伤害。",
+  },
+  poison: {
+    name: "毒",
+    icon: "毒",
+    color: "#8fbf6a",
+    bond: "2 颗：被打中的敌人中毒，每秒 2.5 点伤害，持续 2 秒。3 颗：每秒 5 点。",
+  },
 };
 
 export const GEM_STATS = {
   towerDmg: { name: "炮塔伤害", positive: true },
   heroDmg: { name: "角色伤害", positive: true },
-  wallHp: { name: "城墙生命", positive: true },
+  wallHp: { name: "墙的生命", positive: true },
   goldFind: { name: "金币掉落", positive: true },
-  repair: { name: "维修开销", positive: false },
+  repair: { name: "维修花费", positive: false },
 };
 
 export const QUALITIES = {
